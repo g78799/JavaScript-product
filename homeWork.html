@@ -7,43 +7,43 @@
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="search ">
-            <select  id="select ">
-                <option value="none">根據類型查詢</option>
-            </select>
+    <div class="search">
+        <select id="select">
+            <option value="none">根據類型查詢</option>
+        </select>
 
-            <div class="price">
-                價格:
-                <input type="text" placeholder="最大值" id="max">
-                ~
-                <input type="text" placeholder="最小值" id="min">
-            </div>
+        <div class="price">
+            價格:
+            <input type="text" placeholder="最大值" id="max">
+            ~
+            <input type="text" placeholder="最小值" id="min">
+        </div>
 
-            <div class="name">
-                <input type="text" placeholder="商品名稱" id="name">
-                <button id="searchBtn">搜尋</button>
-            </div>
+        <div class="name">
+            <input type="text" placeholder="商品名稱" id="name">
+            <button id="searchBtn">搜尋</button>
+        </div>
     </div>
 
     <main></main>
-    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-    crossorigin="anonymous"></script>
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
 
-    <script type="Module">
+    <script type="module">
 
         import { product } from "./product.js";
-
+      
         let btn;
 
         window.onload = function () {
-            selectClass()
+            selectType()
             loadData(product)
 
             btn = document.getElementById('searchBtn')
@@ -51,65 +51,70 @@
         }
 
         function loadData(data) {
-            let productList = data.map((product, index) => `
-            <div class="col-12 col-md-3 p-1">
-        <div class="card" id="product${indexx}">
-            <div class="pic">
-                <img src="https://picsum.photos/300/200/?random=${index}">
-            </div>
-            <div class="text">
-                <h2>${product.Product.Name}</h2>
-                <h3>價格: <span>${product.price}</span></h3>
-                <div class="detail d-flex justify-content-between px-1">
-                    <p>剩餘數量: <span>${product.Amount}</span>
-                    </p>
-                    <p>分類: <span>${product.ProductType}</span></p>
+        let productList = data.map((product, index) => `
+          <div class="col-12 col-md-3 p-1">
+            <div class="card" id="product${index}">
+              <div class="pic">
+                <img src="https://picsum.photos/300/200/?
+                random=${index}">
+              </div>
+              <div class="text">
+                <h2>${product.ProductName}</h2>
+                <h3>價格: <span>${product.Price}</span> 元</h3>
+                <div class="detail d-flex
+                justify-content-between px-1">
+                  <p>剩餘數量: <span>${product.Amount}
+                  </span></p>
+                  <p>分類: <span>${product.ProductType}
+                  </span></p>
                 </div>
+              </div>
             </div>
+          </div>
+        `).join('');
+
+      let container = `
+        <div class="container wrap">
+          <div class="row">
+            ${productList}
+          </div>
         </div>
-    </div>
-            `).join(' ');
+      `;
 
-            let container= `
-            <div class="container wrap">
-                <div class="row">
-                    ${productList}
-                </div>
-            </div>
-            `
+      let main = document.querySelector(`main`);
+      main.innerHTML = container;
 
-            let main = document.querySelector(`main`)
-            main.innerHTML = container
-
-            data.forEach((item, index) => {
-                if(item.Amount == 0){
-                    let div = document.getElementById('div')
-                    dis.classList.add('soldOut')
-                    div.innerHtML = "售完"
-                    product.append(div)
-                }
-            });
+      data.forEach((item, index) => {
+        let product = document.getElementById('product' + index)
+        if (item.Amount == 0) {
+          let div = document.getElementById(`product${index}`);
+          div.classList.add('soldOut');
+          div.innerHTML = "售完";
         }
+      });
+    }
+
 
         function selectType() {
             let select = document.getElementById('select')
 
             let productType = product.map(item => item.ProductType)
             let uniqueProductType = [...new Set(productType)]
-            
+          
             uniqueProductType.forEach(item => {
                 let option = document.createElement('option')
-                option.innerText = item
-                option.value = item
+                option.innerText = item;
+                option.value = item;
+                console.log(item)
                 select.appendChild(option)
-            });
+            })
         }
         
         function search() {
             let productList
             let select = document.getElementById('select')
 
-            if (select.value !- 'none') {
+            if (select.value !=='none') {
                 productList = product.filter((product) => {
                     return product.ProductType == select.value
                 });
@@ -123,6 +128,11 @@
             if (min ===''){
                 min = 0;
             }
+            let min = document.getElementById('min').value;
+            if(min === ''){
+                min = 0;
+            }
+
             if (Number(min) > Number(max)) {
                 alert('最小值不能大於最大值');
                 return;
@@ -136,16 +146,15 @@
             toLowerCase();
 
             productList = productList.filter((product) => {
-                return product.productName.toLowerCase().includes(keyword);
+                return product.ProductName.toLowerCase().includes(keyword) || product.ProductType.toLowerCase().includes(keyword);
             });
 
-            if(productList.lenth == 0){
+            if(productList.length == 0){
                 alert('查無商品')
                 return
             }
             loadData(productList)
         }
-
 
         
     </script>
