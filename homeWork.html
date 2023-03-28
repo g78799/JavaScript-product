@@ -41,6 +41,7 @@
         import { product } from "./product.js";
       
         let btn;
+        btn = document.getElementById('searchBtn')
 
         window.onload = function () {
             selectType()
@@ -54,8 +55,8 @@
         let productList = data.map((product, index) => `
           <div class="col-12 col-md-3 p-1">
             <div class="card" id="product${index}">
-              <div class="pic">
-                <img src="https://picsum.photos/300/200/?
+              <div class="pic ">
+                <img  src="https://picsum.photos/300/200/?
                 random=${index}">
               </div>
               <div class="text">
@@ -112,21 +113,21 @@
         
         function search() {
             let productList
-            let select = document.getElementById('select')
+            let search = document.getElementById('search')
 
             if (select.value !=='none') {
                 productList = product.filter((product) => {
                     return product.ProductType == select.value
                 });
             }
-
             else {
                 productList = product
             }
+            console.log(productList.length)
 
             let max = document.getElementById('max').value;
-            if (min ===''){
-                min = 0;
+            if (max ===''){
+                max = 99999;
             }
             let min = document.getElementById('min').value;
             if(min === ''){
@@ -138,21 +139,22 @@
                 return;
             }
 
-            productList = productLst.filter((product) => {
-                return product.price <= max && product.Price >= min
+            productList = productList.filter((product) => {
+                return product.Price <= max && product.Price >= min
             });
-
+            console.log(productList.length)
             let keyword = document.getElementById('name').value.trim().
             toLowerCase();
 
             productList = productList.filter((product) => {
                 return product.ProductName.toLowerCase().includes(keyword) || product.ProductType.toLowerCase().includes(keyword);
             });
-
+            console.log(productList.length)
             if(productList.length == 0){
                 alert('查無商品')
                 return
             }
+            console.log(productList.length)
             loadData(productList)
         }
 

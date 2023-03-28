@@ -22,7 +22,7 @@ export const product = [
   },
   {
     "ProductNumber": "P004",
-    "ProductName": "青森頻果原汁",
+    "ProductName": "青森蘋果原汁",
     "Amount": 100,
     "Price": 370,
     "ProductType": "飲料"
